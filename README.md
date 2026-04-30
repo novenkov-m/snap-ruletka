@@ -32,3 +32,24 @@
 3. `docker compose up -d`
 4. Примени миграции: `alembic upgrade head`
 5. Открой `http://localhost:8000/docs` — документация API.
+
+## Архитектура
+
+├── app/               
+│   ├── api/            
+│   ├── models/           
+│   ├── schemas/         
+│   ├── services/       
+│   ├── utils/           
+│   ├── config.py         
+│   ├── database.py        
+│   └── main.py           
+├── static/               
+├── templates/               
+│   ├── index.html 
+|   └── app.html
+├── alembic/                
+├── .env                    
+├── docker-compose.yml      
+├── requirements.txt        
+└── README.md    

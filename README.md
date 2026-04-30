@@ -35,6 +35,7 @@
 
 ## Архитектура
 
+```
 snapruletka/
 ├── app/                  # Бэкенд (FastAPI)
 │   ├── api/              # Роутеры (auth, photos)
@@ -54,3 +55,4 @@ snapruletka/
 ├── docker-compose.yml    # PostgreSQL, Redis, MinIO
 ├── requirements.txt      # Зависимости Python
 └── README.md
+```

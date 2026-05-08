@@ -33,9 +33,6 @@ jobs:
         ports:
           - 9003:9000
           - 9002:9002
-        options: >-
-          server /data
-          --console-address ":9001"
         
     steps:
       - uses: actions/checkout@v4

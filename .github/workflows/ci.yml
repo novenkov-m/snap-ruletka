@@ -19,7 +19,7 @@ jobs:
           POSTGRES_DB: snapruletka
         ports:
          - 5438:5432
-        optios: >-
+        options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s

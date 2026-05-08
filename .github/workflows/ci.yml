@@ -38,7 +38,7 @@ jobs:
           --console-address ":9001"
         
     steps:
-      - user: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5

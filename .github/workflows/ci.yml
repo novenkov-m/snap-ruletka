@@ -16,9 +16,9 @@ jobs:
         env:
           POSTGRES_USER: snapruletka
           POSTGRES_PASSWORD: snapruletka
-          POSTGRES_DB: snapruletka
+          POSTGRES_DB: snapruletka       
         ports:
-         - 5438:5432
+          - 5432:5432                          
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -31,8 +31,13 @@ jobs:
           MINIO_ROOT_USER: minioadmin
           MINIO_ROOT_PASSWORD: minioadmin
         ports:
-          - 9003:9000
-          - 9002:9002
+          - 9000:9000
+
+        options: >-
+          --health-cmd "mc ready local"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
         
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +45,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13.7'
+          python-version: '3.12'
       
       - name: Install dependencies
         run: |

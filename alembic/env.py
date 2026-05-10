@@ -49,7 +49,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = settings.database_url.replace("+psycopg", "+psycopg2")
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -62,6 +62,11 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
+
+    section = config.get_section(config.config_ini_section, {})
+
+    section["sqlalchemy.url"] = settings.database_url.replace("+psycopg", "+psycopg2")
+    
     """Run migrations in 'online' mode.
 
     In this scenario we need to create an Engine

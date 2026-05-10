@@ -4,8 +4,8 @@ from pathlib import Path
 # Добавляем корень проекта в sys.path, чтобы импортировать модули
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from app.models.models import Base
-from app.config import settings
+from src.models.models import Base
+from src.config import settings
 #---------------------------
 
 

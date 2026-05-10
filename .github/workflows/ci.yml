@@ -72,7 +72,7 @@ jobs:
         run: |
           wget -q https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
-          ./mc alias set myminio http://localhost:9000 minioadmin minioadmin
+          ./mc alias set myminio http://localhost:9003 minioadmin minioadmin
           ./mc mb myminio/snapruletka || echo "Bucket may already exist"
 
       - name: Run Alembic migrations

@@ -14,4 +14,4 @@ aiofiles==25.1.0
 httpx==0.28.0
 pytest==9.0.3
 pydantic-settings==2.14.1
-psycopg-binary==3.3.4
+psycopg[binary]==3.3.4

@@ -4,7 +4,7 @@ from PIL import Image
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
 from fastapi import UploadFile, HTTPException, status
-from ..models.models import Photo, View, User, PhotoStatus
+from ..models.models import Report, Photo, View, User, PhotoStatus
 from ..config import settings
 from ..schemas.schemas import PhotoOut, LikeResponse
 from .storage import upload_file, generate_presigned_url

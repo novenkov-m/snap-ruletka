@@ -35,3 +35,37 @@
 6. `uvicorn src.main:app --reload --host 0.0.0.0 --port 8000`
 7. `http://localhost:8000/docs` - документация
    `http://localhost:8000` - сайт 
+0. скачать uv
+1. git clone <ссылка из code>
+2. `cd snap-ruletka`
+3. `uv venv`
+4. `source .venv/bin/activate`
+5. `uv pip install requirements.txt -r`
+6. `docker compose up -d`
+7. `uvicorn src.main:app --reload --host 0.0.0.0 --port 8000`
+8. `http://localhost:8000/docs` - документация
+   `http://localhost:8000` - сайт
+   
+## Архитектура
+
+```
+snapruletka/
+├── app/                  # Бэкенд (FastAPI)
+│   ├── api/              # Роутеры (auth, photos)
+│   ├── models/           # Модели SQLAlchemy
+│   ├── schemas/          # Pydantic схемы запросов/ответов
+│   ├── services/         # Бизнес-логика (auth, photo, storage)
+│   ├── utils/            # Хеширование паролей, JWT
+│   ├── config.py         # Настройки из .env
+│   ├── database.py       # Подключение к PostgreSQL
+│   └── main.py           # Точка входа FastAPI
+├── static/               # Статические файлы
+├── templates/            # Шаблоны (Jinja2, если используется)
+│   ├── index.html
+│   └── app.html
+├── alembic/              # Миграции БД
+├── .env                  # Локальные переменные окружения
+├── docker-compose.yml    # PostgreSQL, Redis, MinIO
+├── requirements.txt      # Зависимости Python
+└── README.md
+```

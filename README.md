@@ -26,6 +26,15 @@
 
 
 ## Запуск локально
+
+1. git clone <ссылка из code>
+2. `cd snap-ruletka`
+3. `source .venv/bin/activate`
+4. `uv pip install requirements.txt -r`
+5. `docker compose up -d`
+6. `uvicorn src.main:app --reload --host 0.0.0.0 --port 8000`
+7. `http://localhost:8000/docs` - документация
+   `http://localhost:8000` - сайт 
 0. скачать uv
 1. git clone <ссылка из code>
 2. `cd snap-ruletka`

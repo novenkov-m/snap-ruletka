@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapRuletka – честный фотообмен</title>
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --card: #1a1a1a;
+            --accent: #a855f7;
+            --accent-hover: #9333ea;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --text: #f4f4f4;
+            --muted: #a0a0a0;
+            --border: #2a2a2a;
+            --radius: 16px;
+            --shadow: 0 8px 30px rgba(0,0,0,0.6);
+            --transition: 0.2s ease;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+            line-height: 1.5;
+        }
+        .app {
+            width: 100%;
+            max-width: 440px;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem 1.5rem;
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+        }
+        h1 {
+            text-align: center;
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.3rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 1.8rem;
+        }
+        .hidden { display: none !important; }
+
+        /* Кнопки */
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.2rem;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            background: var(--accent);
+            color: white;
+            width: 100%;
+        }
+        button:hover { background: var(--accent-hover); }
+        button:active { transform: scale(0.97); }
+        button.secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        button.secondary:hover { background: rgba(255,255,255,0.05); }
+        button.danger {
+            background: var(--danger);
+        }
+        button.icon-btn {
+            width: auto;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Формы */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            color: var(--muted);
+        }
+        input[type="email"],
+        input[type="password"],
+        input[type="file"] {
+            width: 100%;
+            padding: 0.75rem 0.8rem;
+            background: #111;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: var(--text);
+            transition: border-color var(--transition);
+            outline: none;
+        }
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(168,85,247,0.2);
+        }
+        .error {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            min-height: 1.2rem;
+        }
+
+        /* Табы */
+        .tabs {
+            display: flex;
+            background: #111;
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 1.5rem;
+        }
+        .tabs button {
+            flex: 1;
+            background: transparent;
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+        .tabs button.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Хедер */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        .balance {
+            background: #111;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        .user-email {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        /* Фото */
+        .photo-frame {
+            position: relative;
+            width: 100%;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: #0a0a0a;
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+        }
+        .photo-frame img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+        .photo-placeholder {
+            color: #555;
+            font-size: 1rem;
+        }
+        .photo-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .photo-actions button {
+            flex: 1;
+        }
+        .message {
+            margin-top: 1rem;
+            padding: 0.6rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            text-align: center;
+            background: #1e1e1e;
+            color: var(--muted);
+        }
+        .message.success { background: #14532d; color: #86efac; }
+        .message.info { background: #1e1b4b; color: #c4b5fd; }
+        .message.error { background: #450a0a; color: #fca5a5; }
+
+        .divider {
+            margin: 1.5rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Адаптив */
+        @media (max-width: 480px) {
+            .app { padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="app" id="app">
+    <!-- Неавторизованный блок -->
+    <div id="auth-section">
+        <h1>SnapRuletka</h1>
+        <div class="subtitle">один кадр → пять взглядов</div>
+        <div class="tabs">
+            <button id="tab-login" class="active">Вход</button>
+            <button id="tab-register">Регистрация</button>
+        </div>
+        <div id="login-form">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="login-email" placeholder="user@example.com">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="login-password" placeholder="••••••••">
+            </div>
+            <div class="error" id="login-error"></div>
+            <button id="login-btn">Войти</button>
+        </div>
+        <div id="register-form" class="hidden">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="reg-email" placeholder="user@example.com">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="reg-password" placeholder="Минимум 4 символа">
+            </div>
+            <div class="error" id="reg-error"></div>
+            <button id="reg-btn">Зарегистрироваться</button>
+        </div>
+    </div>
+
+    <!-- Авторизованный блок -->
+    <div id="user-section" class="hidden">
+        <div class="header">
+            <h1 style="font-size:1.5rem; margin:0;">SnapRuletka</h1>
+            <button id="logout-btn" class="secondary icon-btn">Выйти</button>
+        </div>
+        <div class="header" style="margin-bottom:1rem;">
+            <span class="user-email" id="user-email-display"></span>
+            <span class="balance" id="balance-display">0 просмотров</span>
+        </div>
+
+        <!-- Загрузка -->
+        <div class="form-group">
+            <label>Загрузить фото (+5 просмотров)</label>
+            <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp">
+        </div>
+        <div class="error" id="upload-error"></div>
+        <button id="upload-btn">Загрузить</button>
+        <div id="upload-status" class="message hidden"></div>
+
+        <div class="divider"></div>
+
+        <!-- Случайное фото -->
+        <button id="random-btn">🎲 Показать случайное фото</button>
+        <div class="error" id="random-error"></div>
+        <div id="photo-view" class="hidden">
+            <div class="photo-frame" id="photo-container">
+                <span class="photo-placeholder" id="photo-placeholder">Загрузка...</span>
+            </div>
+            <div class="photo-actions">
+                <button id="like-btn">❤️</button>
+                <button id="next-btn" class="secondary">→ Дальше</button>
+                <button id="report-btn" class="danger">Пожаловаться</button>
+            </div>
+            <div id="photo-message" class="message hidden"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===================== КОНФИГУРАЦИЯ =====================
+    const API_BASE = '';  // запросы на тот же хост (http://localhost:8000)
+
+    // ===================== УТИЛИТЫ =====================
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+
+    const show = (el) => { if (el) el.classList.remove('hidden'); };
+    const hide = (el) => { if (el) el.classList.add('hidden'); };
+    const setError = (el, msg) => { if (el) el.textContent = msg || ''; };
+    const setMessage = (el, msg, type='') => {
+        if (!el) return;
+        el.textContent = msg;
+        el.className = 'message ' + type;
+        show(el);
+    };
+
+    // ===================== СОСТОЯНИЕ =====================
+    let currentToken = localStorage.getItem('token') || null;
+    let currentUser = null;      // { id, email, view_balance }
+    let currentPhoto = null;     // { id, url, liked_by_me }
+
+    // ===================== DOM ЭЛЕМЕНТЫ =====================
+    const authSection = $('#auth-section');
+    const userSection = $('#user-section');
+    const loginForm = $('#login-form');
+    const registerForm = $('#register-form');
+    const tabLogin = $('#tab-login');
+    const tabRegister = $('#tab-register');
+    const loginBtn = $('#login-btn');
+    const regBtn = $('#reg-btn');
+    const loginError = $('#login-error');
+    const regError = $('#reg-error');
+    const balanceDisplay = $('#balance-display');
+    const userEmailDisplay = $('#user-email-display');
+    const uploadBtn = $('#upload-btn');
+    const fileInput = $('#file-input');
+    const uploadError = $('#upload-error');
+    const uploadStatus = $('#upload-status');
+    const randomBtn = $('#random-btn');
+    const randomError = $('#random-error');
+    const photoView = $('#photo-view');
+    const photoContainer = $('#photo-container');
+    const likeBtn = $('#like-btn');
+    const nextBtn = $('#next-btn');
+    const reportBtn = $('#report-btn');
+    const photoMessage = $('#photo-message');
+    const logoutBtn = $('#logout-btn');
+
+    // ===================== API-ОБЁРТКА =====================
+    async function apiRequest(path, options = {}) {
+        const headers = options.headers || {};
+        if (currentToken) {
+            headers['Authorization'] = `Bearer ${currentToken}`;
+        }
+        const config = { ...options, headers };
+        const res = await fetch(API_BASE + path, config);
+        return res;
+    }
+
+    async function handleApiError(res, defaultMsg) {
+        if (res.status === 401) {
+            // токен истёк
+            currentToken = null;
+            localStorage.removeItem('token');
+            currentUser = null;
+            updateUIForAuth();
+            return 'Сессия истекла. Войдите заново.';
+        }
+        if (res.status === 402) return 'Недостаточно просмотров. Загрузите фото.';
+        if (res.status === 404) return 'Фото не найдено.';
+        if (res.status === 422) {
+            const err = await res.json();
+            return err.detail || 'Ошибка валидации.';
+        }
+        return defaultMsg || 'Ошибка сервера';
+    }
+
+    // ===================== ОТОБРАЖЕНИЕ ИНТЕРФЕЙСА =====================
+    function updateUIForAuth() {
+        if (currentToken && currentUser) {
+            hide(authSection);
+            show(userSection);
+            userEmailDisplay.textContent = currentUser.email;
+            balanceDisplay.textContent = `${currentUser.view_balance} просмотров`;
+            hidePhoto();
+        } else {
+            show(authSection);
+            hide(userSection);
+            currentToken = null;
+            localStorage.removeItem('token');
+            currentUser = null;
+        }
+    }
+
+    function hidePhoto() {
+        hide(photoView);
+        currentPhoto = null;
+        photoContainer.innerHTML = '<span class="photo-placeholder">Нажмите «Показать случайное фото»</span>';
+        hide(photoMessage);
+        setError(randomError, '');
+        likeBtn.textContent = '❤️';
+    }
+
+    function displayPhoto(photo) {
+        currentPhoto = photo;
+        photoContainer.innerHTML = `<img src="${photo.url}" alt="Случайное фото">`;
+        show(photoView);
+        likeBtn.textContent = photo.liked_by_me ? '💔' : '❤️';
+        hide(photoMessage);
+    }
+
+    // ===================== ЗАГРУЗКА ПРОФИЛЯ =====================
+    async function loadProfile() {
+        if (!currentToken) return;
+        try {
+            const res = await apiRequest('/auth/me');
+            if (res.ok) {
+                currentUser = await res.json();
+                updateUIForAuth();
+            } else if (res.status === 401) {
+                currentToken = null;
+                localStorage.removeItem('token');
+                updateUIForAuth();
+            }
+        } catch (e) {
+            console.error('Ошибка загрузки профиля', e);
+        }
+    }
+
+    async function refreshBalance() {
+        if (!currentToken) return;
+        const res = await apiRequest('/auth/me');
+        if (res.ok) {
+            const data = await res.json();
+            currentUser = data;
+            balanceDisplay.textContent = `${data.view_balance} просмотров`;
+        }
+    }
+
+    // ===================== АВТОРИЗАЦИЯ =====================
+    tabLogin.addEventListener('click', () => {
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        show(loginForm);
+        hide(registerForm);
+    });
+    tabRegister.addEventListener('click', () => {
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+        show(registerForm);
+        hide(loginForm);
+    });
+
+    loginBtn.addEventListener('click', async () => {
+        const email = $('#login-email').value.trim();
+        const password = $('#login-password').value;
+        setError(loginError, '');
+        if (!email || !password) {
+            setError(loginError, 'Заполните все поля');
+            return;
+        }
+        const formData = new URLSearchParams();
+        formData.append('username', email);
+        formData.append('password', password);
+        try {
+            const res = await fetch(API_BASE + '/auth/token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData
+            });
+            if (res.ok) {
+                const data = await res.json();
+                currentToken = data.access_token;
+                localStorage.setItem('token', currentToken);
+                $('#login-email').value = '';
+                $('#login-password').value = '';
+                await loadProfile();
+            } else {
+                const err = await res.json();
+                setError(loginError, err.detail || 'Ошибка входа');
+            }
+        } catch (e) {
+            setError(loginError, 'Сетевая ошибка');
+        }
+    });
+
+    regBtn.addEventListener('click', async () => {
+        const email = $('#reg-email').value.trim();
+        const password = $('#reg-password').value;
+        setError(regError, '');
+        if (!email || !password) {
+            setError(regError, 'Заполните все поля');
+            return;
+        }
+        try {
+            const res = await fetch(API_BASE + '/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            if (res.ok) {
+                // авто-логин
+                const formData = new URLSearchParams();
+                formData.append('username', email);
+                formData.append('password', password);
+                const loginRes = await fetch(API_BASE + '/auth/token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData
+                });
+                if (loginRes.ok) {
+                    const data = await loginRes.json();
+                    currentToken = data.access_token;
+                    localStorage.setItem('token', currentToken);
+                    $('#reg-email').value = '';
+                    $('#reg-password').value = '';
+                    await loadProfile();
+                }
+            } else {
+                const err = await res.json();
+                setError(regError, err.detail || 'Ошибка регистрации');
+            }
+        } catch (e) {
+            setError(regError, 'Сетевая ошибка');
+        }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+        currentToken = null;
+        currentUser = null;
+        localStorage.removeItem('token');
+        updateUIForAuth();
+    });
+
+    // ===================== ФОТО =====================
+    uploadBtn.addEventListener('click', async () => {
+        const file = fileInput.files[0];
+        setError(uploadError, '');
+        hide(uploadStatus);
+        if (!file) {
+            setError(uploadError, 'Выберите файл');
+            return;
+        }
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const res = await apiRequest('/photos/upload', { method: 'POST', body: formData });
+            if (res.ok) {
+                const data = await res.json();
+                setMessage(uploadStatus, 'Фото загружено! Баланс обновлён.', 'success');
+                fileInput.value = '';
+                await refreshBalance();
+            } else {
+                const msg = await handleApiError(res, 'Ошибка загрузки');
+                setError(uploadError, msg);
+            }
+        } catch (e) {
+            setError(uploadError, 'Сетевая ошибка');
+        }
+    });
+
+    randomBtn.addEventListener('click', async () => {
+        setError(randomError, '');
+        hidePhoto();
+        try {
+            const res = await apiRequest('/photos/random');
+            if (res.ok) {
+                const photo = await res.json();
+                displayPhoto(photo);
+                await refreshBalance();
+            } else {
+                const msg = await handleApiError(res, 'Нет доступных фото');
+                setError(randomError, msg);
+            }
+        } catch (e) {
+            setError(randomError, 'Сетевая ошибка');
+        }
+    });
+
+    likeBtn.addEventListener('click', async () => {
+        if (!currentPhoto) return;
+        try {
+            const res = await apiRequest(`/photos/${currentPhoto.id}/like`, { method: 'POST' });
+            if (res.ok) {
+                const data = await res.json();
+                currentPhoto.liked_by_me = data.liked;
+                likeBtn.textContent = data.liked ? '💔' : '❤️';
+                setMessage(photoMessage, data.liked ? 'Лайк ❤️' : 'Лайк убран', 'info');
+            } else {
+                const msg = await handleApiError(res, 'Ошибка');
+                setMessage(photoMessage, msg, 'error');
+            }
+        } catch (e) {
+            setMessage(photoMessage, 'Сетевая ошибка', 'error');
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        randomBtn.click();
+    });
+
+    reportBtn.addEventListener('click', async () => {
+        if (!currentPhoto) return;
+        const reason = prompt('Причина жалобы (можно оставить пустым):');
+        try {
+            const res = await apiRequest(`/photos/${currentPhoto.id}/report`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reason: reason || '' })
+            });
+            if (res.ok) {
+                setMessage(photoMessage, 'Жалоба отправлена. Фото скрыто.', 'info');
+                setTimeout(() => hidePhoto(), 1500);
+            } else {
+                const msg = await handleApiError(res, 'Ошибка');
+                setMessage(photoMessage, msg, 'error');
+            }
+        } catch (e) {
+            setMessage(photoMessage, 'Сетевая ошибка', 'error');
+        }
+    });
+
+    // ===================== ИНИЦИАЛИЗАЦИЯ =====================
+    window.addEventListener('DOMContentLoaded', async () => {
+        if (currentToken) {
+            await loadProfile();
+        } else {
+            updateUIForAuth();
+        }
+        // по умолчанию показываем форму входа
+        show(loginForm);
+        hide(registerForm);
+    });
+</script>
+</body>
+</html>
